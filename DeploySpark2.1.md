@@ -10,6 +10,46 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
+#### Check the version of CDH and Hadoop running on your cluster using
+
+```makedown
+# hadoop version
+Hadoop 2.6.0-cdh5.7.0
+```
+
+#### Download Spark's source code from [Spark] (http://spark.apache.org/downloads.html)
+
+#### Compile
+
+```markdown
+-Phive -Phive-thriftserver -Pyarn
+```
+
+#### Change SPARK_HOME
+
+#### Change configuration
+
+```markdown
+
+```
+
+#### Copying Spark floder to all nodes
+
+```
+# scp
+```
+
+#### Finally test your new Spark
+
+```markdown
+./bin/run-example SparkP 10 --master yarn
+./bin/spark-shell --master yarn
+./bin/pyspark
+
+```
+
+
+
 ```markdown
 Syntax highlighted code block
 
