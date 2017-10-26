@@ -27,3 +27,5 @@ Please set $ACCUMULO_HOME to the root of your Accumulo installation.
 --hive-database testhive \
 --compression-codec org.apache.hadoop.io.compress.SnappyCodec \
 --warehouse-dir /loudacre/accounts_hive
+
+## It was not necessary to set 'warehouse-dir' because the final data was stored into /user/hive/warehouse/testhive.db automatically.
