@@ -92,3 +92,53 @@ scala> sqlContext.sql("select * from ps where TO_DATE(CAST(UNIX_TIMESTAMP(dateOf
 
 
 ##
+
+```
+scala> val keysWithValuesList = Array("foo=A", "foo=A", "foo=A", "foo=A", "foo=B", "bar=C", "bar=D", "bar=D")
+keysWithValuesList: Array[String] = Array(foo=A, foo=A, foo=A, foo=A, foo=B, bar=C, bar=D, bar=D)
+
+scala> val data = sc.parallelize(keysWithValuesList)
+data: org.apache.spark.rdd.RDD[String] = ParallelCollectionRDD[0] at parallelize at <console>:29
+
+scala> data.first
+res0: String = foo=A
+
+scala> val kv = data.map(_.split("=")).map(v => (v(0), v(1)))
+kv: org.apache.spark.rdd.RDD[(String, String)] = MapPartitionsRDD[3] at map at <console>:31
+
+scala> kv.first
+res2: (String, String) = (foo,A)
+
+scala> val initCount = 0
+initCount: Int = 0
+
+scala> val addToCounts = (n: Int, v: String) => n + 1
+addToCounts: (Int, String) => Int = <function2>
+
+scala> val sumPartitionCounts = (p1: Int, p2: Int) => p1 + p2
+sumPartitionCounts: (Int, Int) => Int = <function2>
+
+scala> val countByKey = kv.aggregateByKey(initCount)(addToCounts, sumPartitionCounts)
+countByKey: org.apache.spark.rdd.RDD[(String, Int)] = ShuffledRDD[4] at aggregateByKey at <console>:39
+
+scala> countByKey.collect
+res3: Array[(String, Int)] = Array((foo,5), (bar,3))
+
+scala> import scala.collection._
+import scala.collection._
+
+scala> val initSet = scala.collection.mutable.HashSet.empty[String]
+initSet: scala.collection.mutable.HashSet[String] = Set()
+
+scala> val addToSet = (s: mutable.HashSet[String], v: String) => s += v
+addToSet: (scala.collection.mutable.HashSet[String], String) => scala.collection.mutable.HashSet[String] = <function2>
+
+scala> val mergePartitionSets = (p1: mutable.HashSet[String], p2: mutable.HashSet[String]) => p1 ++= p2
+mergePartitionSets: (scala.collection.mutable.HashSet[String], scala.collection.mutable.HashSet[String]) => scala.collection.mutable.HashSet[String] = <function2>
+
+scala> val uniqueByKey = kv.aggregateByKey(initSet)(addToSet, mergePartitionSets)
+uniqueByKey: org.apache.spark.rdd.RDD[(String, scala.collection.mutable.HashSet[String])] = ShuffledRDD[5] at aggregateByKey at <console>:42
+
+scala> uniqueByKey.collect
+res4: Array[(String, scala.collection.mutable.HashSet[String])] = Array((foo,Set(B, A)), (bar,Set(C, D)))
+```
