@@ -159,4 +159,7 @@ Found 3 items
 
 ```
 CREATE EXTERNAL TABLE product_test (prodoctid int, productcode string, name string, quantity int, price float) stored as orc location '/user/hive/warehouse/product_orc_tbl';
+
+CREATE EXTERNAL TABLE product_parquet_test (prodoctid int, productcode string, name string, quantity int, price float) stored as parquet location '/user/hive/warehouse/product_parquet_tbl';
+
 ```
