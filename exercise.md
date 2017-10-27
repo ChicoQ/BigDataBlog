@@ -142,3 +142,21 @@ uniqueByKey: org.apache.spark.rdd.RDD[(String, scala.collection.mutable.HashSet[
 scala> uniqueByKey.collect
 res4: Array[(String, scala.collection.mutable.HashSet[String])] = Array((foo,Set(B, A)), (bar,Set(C, D)))
 ```
+
+
+##
+
+```
+
+[ec2-user@ip-172-29-1-12 ~]$ hdfs dfs -ls /user/hive/warehouse/product_orc_tbl
+Found 3 items
+-rw-r--r--   3 ec2-user hive          0 2017-10-27 13:56 /user/hive/warehouse/product_orc_tbl/_SUCCESS
+-rw-r--r--   3 ec2-user hive        717 2017-10-27 13:56 /user/hive/warehouse/product_orc_tbl/part-r-00000-5f3f4e4e-2c94-4302-bb4c-9cf5ed6c565b.orc
+-rw-r--r--   3 ec2-user hive        665 2017-10-27 13:56 /user/hive/warehouse/product_orc_tbl/part-r-00001-5f3f4e4e-2c94-4302-bb4c-9cf5ed6c565b.orc
+```
+
+##
+
+```
+CREATE EXTERNAL TABLE product_test (prodoctid int, productcode string, name string, quantity int, price float) stored as orc location '/user/hive/warehouse/product_orc_tbl';
+```
