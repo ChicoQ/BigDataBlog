@@ -29,3 +29,17 @@ Please set $ACCUMULO_HOME to the root of your Accumulo installation.
 --warehouse-dir /loudacre/accounts_hive
 
 ## It was not necessary to set 'warehouse-dir' because the final data was stored into /user/hive/warehouse/testhive.db automatically.
+
+## Sqoop first imports the data to a temporary location in HDFS.  It then generates a query for creating a table and also anohter query for loading the data from the temporary HDFS location, using the Hive `load data inpath` statement to move the data into the Hive warehouse directory in HDFS.  You can specify the temporary location with either the `--target-dir` parameter or the `--warehouse-dir` parameter.
+
+```
+sqoop import
+--connect jdbc:mysql://172.29.1.12/test
+--username root
+--password ####
+--table accounts
+--hive-table accounts
+--create-hive-table
+--hive-import
+--hive-home /path/to/hive_home
+```
