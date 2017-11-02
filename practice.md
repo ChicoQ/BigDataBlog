@@ -1,3 +1,6 @@
+## Spark scripts
+
+```
 sqlContext.sql("create table if not exists mytab (key int, value string) row format delimited fields terminated by \",\" ")
 sqlContext.sql("create table if not exists mytab (key int, value string) row format delimited fields terminated by ',' ")
 
@@ -12,6 +15,7 @@ val kvr = sc.parallelize(List((1950, 0), (1950, 22), (1950, -11), (1949, 111), (
 
 
 val v2 = vr.map{case v => math.log10(v.toDouble)/math.log10(2.0)}
+```
 
 ```
 scala> :paste
@@ -456,12 +460,13 @@ http://arun-teaches-u-tech.blogspot.co.nz/p/file-formats.html
 
 
 
-##
+## Sqoop commands
 
+```
 [cloudera@quickstart ~]$ sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop5 --as-avrodatafile --compression-codec org.apache.hadoop.io.compress.GzipCodec
 Error: org.apache.avro.AvroRuntimeException: Unrecognized codec: gzip
 
-##
+
 
 sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop
 
@@ -488,6 +493,9 @@ parquet-tools meta hdfs://quickstart/user/cloudera/sqoop2/0d762369-3646-4484-9ec
 
 sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop4 --as-parquetfile --compression-codec org.apache.hadoop.io.compress.GzipCodec
 
+```
+
+```
 cloudera@quickstart ~]$ hdfs dfs -ls sqoop4
 Found 6 items
 drwxr-xr-x   - cloudera cloudera          0 2017-11-02 11:53 sqoop4/.metadata
@@ -496,8 +504,9 @@ drwxr-xr-x   - cloudera cloudera          0 2017-11-02 11:53 sqoop4/.signals
 -rw-r--r--   1 cloudera cloudera       2307 2017-11-02 11:53 sqoop4/b2389ee7-ac0b-49e4-9903-912971ee5227.parquet
 -rw-r--r--   1 cloudera cloudera       2273 2017-11-02 11:53 sqoop4/ec8c2dc7-9ab7-430a-8900-662c34bf8397.parquet
 -rw-r--r--   1 cloudera cloudera       2277 2017-11-02 11:53 sqoop4/eccc51ce-2c2d-4baa-b92b-32b87b617a3e.parquet
-[cloudera@quickstart ~]$
-[cloudera@quickstart ~]$
+```
+
+```
 [cloudera@quickstart ~]$ parquet-tools meta hdfs://quickstart/user/cloudera/sqoop4/8ae1c639-fe0b-45ef-b390-25ea89e8ec0c.parquet
 creator:                 parquet-mr version 1.5.0-cdh5.12.0 (build ${buildNumber})
 extra:                   parquet.avro.schema = {"type":"record","name":"USERS","doc":"Sqoop import of USERS","fields":[{"name":"USER_ID","type":["null" [more]...
@@ -535,11 +544,13 @@ PASSWORD_SALT = -5340757984488052789
 PASSWORD_LOGIN = true
 OPTIMISTIC_LOCK_VERSION = 1
 
-
+```
 
 ##
 
+```
 [cloudera@quickstart ~]$ sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop5 --as-avrodatafile --compression-codec org.apache.hadoop.io.compress.SnappyCodec
+```
 
 ```
 [cloudera@quickstart ~]$ hdfs dfs -ls sqoop5
@@ -551,6 +562,9 @@ Found 5 items
 -rw-r--r--   1 cloudera cloudera       1054 2017-11-02 11:56 sqoop5/part-m-00003.avro
 ```
 
+## avro-tools commands
+
+```
 [cloudera@quickstart ~]$ avro-tools --help
 Version 1.7.6-cdh5.12.0 of Apache Avro
 Copyright 2010 The Apache Software Foundation
@@ -588,24 +602,28 @@ Available tools:
   trevni_meta  Dumps a Trevni file's metadata as JSON.
 trevni_random  Create a Trevni file filled with random instances of a schema.
 trevni_tojson  Dumps a Trevni file as JSON.
+```
 
-
+```
 [cloudera@quickstart ~]$ avro-tools totext hdfs://quickstart/user/cloudera/sqoop5/part-m-00000.avro aout.txt
 log4j:WARN No appenders could be found for logger (org.apache.hadoop.metrics2.lib.MutableMetricsFactory).
 log4j:WARN Please initialize the log4j system properly.
 log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 Avro file is not generic text schema
 No options specified
+```
 
 
+```
 [cloudera@quickstart ~]$ avro-tools getmeta hdfs://quickstart/user/cloudera/sqoop5/part-m-00000.avro
 log4j:WARN No appenders could be found for logger (org.apache.hadoop.metrics2.lib.MutableMetricsFactory).
 log4j:WARN Please initialize the log4j system properly.
 log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 avro.codec	snappy
 avro.schema	{"type":"record","name":"USERS","doc":"Sqoop import of USERS","fields":[{"name":"USER_ID","type":["null","long"],"default":null,"columnName":"USER_ID","sqlType":"-5"},{"name":"USER_NAME","type":["null","string"],"default":null,"columnName":"USER_NAME","sqlType":"12"},{"name":"PASSWORD_HASH","type":["null","string"],"default":null,"columnName":"PASSWORD_HASH","sqlType":"12"},{"name":"PASSWORD_SALT","type":["null","long"],"default":null,"columnName":"PASSWORD_SALT","sqlType":"-5"},{"name":"PASSWORD_LOGIN","type":["null","boolean"],"default":null,"columnName":"PASSWORD_LOGIN","sqlType":"-7"},{"name":"OPTIMISTIC_LOCK_VERSION","type":["null","long"],"default":null,"columnName":"OPTIMISTIC_LOCK_VERSION","sqlType":"-5"}],"tableName":"USERS"}
+```
 
-
+```
 [cloudera@quickstart ~]$ avro-tools getschema hdfs://quickstart/user/cloudera/sqoop5/part-m-00000.avro
 log4j:WARN No appenders could be found for logger (org.apache.hadoop.metrics2.lib.MutableMetricsFactory).
 log4j:WARN Please initialize the log4j system properly.
@@ -653,15 +671,18 @@ log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more in
   } ],
   "tableName" : "USERS"
 }
+```
 
+```
 [cloudera@quickstart ~]$ avro-tools tojson hdfs://quickstart/user/cloudera/sqoop5/part-m-00000.avro
 log4j:WARN No appenders could be found for logger (org.apache.hadoop.metrics2.lib.MutableMetricsFactory).
 log4j:WARN Please initialize the log4j system properly.
 log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
 {"USER_ID":{"long":1},"USER_NAME":{"string":"admin"},"PASSWORD_HASH":{"string":"df559cbcb008277c166f0df9baa551e834d55ce08faf1dacdeda46f53e9367b8"},"PASSWORD_SALT":{"long":2940308216918769267},"PASSWORD_LOGIN":{"boolean":true},"OPTIMISTIC_LOCK_VERSION":{"long":2}}
 {"USER_ID":{"long":2},"USER_NAME":{"string":"cloudera"},"PASSWORD_HASH":{"string":"d552e45ab348cc0600c3721f4bc72dc265081bcc9e8e6b0c71fdd6d91e591680"},"PASSWORD_SALT":{"long":-5340757984488052789},"PASSWORD_LOGIN":{"boolean":true},"OPTIMISTIC_LOCK_VERSION":{"long":1}}
+```
 
-
+```
 [cloudera@quickstart ~]$ avro-tools tojson hdfs://quickstart/user/cloudera/sqoop5/part-m-00000.avro --pretty
 log4j:WARN No appenders could be found for logger (org.apache.hadoop.metrics2.lib.MutableMetricsFactory).
 log4j:WARN Please initialize the log4j system properly.
@@ -706,4 +727,6 @@ log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more in
     "long" : 1
   }
 }
-[cloudera@quickstart ~]$
+```
+
+##
