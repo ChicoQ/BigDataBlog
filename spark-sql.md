@@ -1,3 +1,5 @@
+## created a df
+
 ```
 scala> case class Token(name: String, productId: Int, score: Double)
 defined class Token
@@ -24,13 +26,13 @@ scala> tokens.show
 
 ```
 
-##
+## rank
 
 ```
 scala> :paste
 // Entering paste mode (ctrl-D to finish)
 
- val customers = sc.parallelize(List(("Alice", "2016-05-01", 50.00),
+val customers = sc.parallelize(List(("Alice", "2016-05-01", 50.00),
                                     ("Alice", "2016-05-03", 45.00),
                                     ("Alice", "2016-05-04", 55.00),
                                     ("Bob", "2016-05-01", 25.00),
@@ -90,8 +92,9 @@ scala> customers.withColumn("rank", rank().over(wSpec4)).show
 |  Bob|2016-05-04|       29.0|   3|
 +-----+----------+-----------+----+
 
-scala> val rdd = sc.parallelize(List((0, "Anna", "female", 172),
-     | (1, "Bert", "male", 182),
+scala> val rdd = sc.parallelize(List(
+     |     (0, "Anna", "female", 172),
+     |     (1, "Bert", "male", 182),
      |     (2, "Curt", "male", 170),
      |     (3, "Doris", "female", 164),
      |     (4, "Edna", "female", 171),
@@ -264,8 +267,10 @@ scala> df.orderBy('height.desc).show
 |  3|Doris|female|   164|
 |  5|Felix|  male|   160|
 +---+-----+------+------+
+```
+## groupBy
 
-
+```
 scala> df.groupBy('sex).count.show
 +------+-----+
 |   sex|count|
@@ -282,7 +287,6 @@ scala> df.groupBy('sex).agg(sum('height)).show
 |  male|        512|
 +------+-----------+
 
-
 scala> df.groupBy('sex).agg(max('height)).show
 +------+-----------+
 |   sex|max(height)|
@@ -290,15 +294,6 @@ scala> df.groupBy('sex).agg(max('height)).show
 |female|        172|
 |  male|        182|
 +------+-----------+
-
-scala> df.groupBy('sex).agg(avg('height)).show
-+------+------------------+
-|   sex|       avg(height)|
-+------+------------------+
-|female|             169.0|
-|  male|170.66666666666666|
-+------+------------------+
-
 
 scala> df.groupBy('sex).agg(min('height)).show
 +------+-----------+
@@ -308,7 +303,6 @@ scala> df.groupBy('sex).agg(min('height)).show
 |  male|        160|
 +------+-----------+
 
-
 scala> df.groupBy('sex).agg(mean('height)).show
 +------+------------------+
 |   sex|       avg(height)|
@@ -317,6 +311,13 @@ scala> df.groupBy('sex).agg(mean('height)).show
 |  male|170.66666666666666|
 +------+------------------+
 
+scala> df.groupBy('sex).agg(avg('height)).show
++------+------------------+
+|   sex|       avg(height)|
++------+------------------+
+|female|             169.0|
+|  male|170.66666666666666|
++------+------------------+
 
 scala> df.groupBy('sex).agg(count('height)).show
 +------+-------------+
