@@ -1,4 +1,12 @@
-##
+## flume-ng
+
+Xms512m
+Xmx1024m
+
+Xms1G
+Xmx1G
+
+## spark-shell
 
 ```
 scala> val r1 = sc.textFile("file:///home/ec2-user/patients.csv")
@@ -19,12 +27,11 @@ patientID,name,dateOfBirth,lastVisitDate
 1002,Kumar,2011-01-30,2012-09-20
 1003,Ali,2011-01-30,2012-10-21
 
-scala> case class Patient(patientID: Int,name: String,dateOfBirth: String,lastVisitDate: String)
+scala> case class Patient(patientID: Int, name: String, dateOfBirth: String, lastVisitDate: String)
 defined class Patient
 
 scala> val pat = r1.filter(s => !s.startsWith("p")).map(_.split(",")).map(p => Patient(p(0).toInt, p(1), p(2), p(3)))
 pat: org.apache.spark.rdd.RDD[Patient] = MapPartitionsRDD[40] at map at <console>:32
-
 
 scala> patdf.printSchema
 root
@@ -32,9 +39,6 @@ root
  |-- name: string (nullable = true)
  |-- dateOfBirth: string (nullable = true)
  |-- lastVisitDate: string (nullable = true)
-
-
-scala>
 
 scala> patdf.registerTempTable("ps")
 
@@ -70,9 +74,6 @@ scala> sqlContext.sql("select name, dateOfBirth, datediff(current_date(), TO_DAT
 |    Ali| 2011-01-30| 6.742465753424658|
 +-------+-----------+------------------+
 
-
-scala>
-
 scala> sqlContext.sql("select * from ps where TO_DATE(CAST(UNIX_TIMESTAMP(dateOfBirth, 'yyyy-MM-dd') AS TIMESTAMP)) > date_sub(current_date(), 18*365) ").show
 +---------+-----+-----------+-------------+
 |patientID| name|dateOfBirth|lastVisitDate|
@@ -90,8 +91,92 @@ scala> sqlContext.sql("select * from ps where TO_DATE(CAST(UNIX_TIMESTAMP(dateOf
 +---------+-------+-----------+-------------+
 ```
 
+## to_date
 
-##
+```
+scala> val data = sc.parallelize(List((1001, "ah", 1991-12-31), (1002, "bk", 2001-01-20))).toDF("no", "name", "dt")
+warning: there were 1 deprecation warning(s); re-run with -deprecation for details
+data: org.apache.spark.sql.DataFrame = [no: int, name: string, dt: int]
+
+scala> data.show
++----+----+----+
+|  no|name|  dt|
++----+----+----+
+|1001|  ah|1948|
+|1002|  bk|1980|
++----+----+----+
+
+
+scala> val data = sc.parallelize(List((1001, "ah", "1991-12-31"), (1002, "bk", "2001-01-20"))).toDF("no", "name", "dt")
+data: org.apache.spark.sql.DataFrame = [no: int, name: string, dt: string]
+
+scala> data.show
++----+----+----------+
+|  no|name|        dt|
++----+----+----------+
+|1001|  ah|1991-12-31|
+|1002|  bk|2001-01-20|
++----+----+----------+
+
+scala> data.select('no, 'name, to_date('dt)).show
++----+----+----------+
+|  no|name|todate(dt)|
++----+----+----------+
+|1001|  ah|1991-12-31|
+|1002|  bk|2001-01-20|
++----+----+----------+
+
+scala> data.select('no, 'name, to_date('dt) as 'ndt).show
++----+----+----------+
+|  no|name|       ndt|
++----+----+----------+
+|1001|  ah|1991-12-31|
+|1002|  bk|2001-01-20|
++----+----+----------+
+
+scala> val df2 = data.withColumn("ts", (col("dt").cast("timestamp")))
+df2: org.apache.spark.sql.DataFrame = [no: int, name: string, dt: string, ts: timestamp]
+
+scala> df2.show
++----+----+----------+--------------------+
+|  no|name|        dt|                  ts|
++----+----+----------+--------------------+
+|1001|  ah|1991-12-31|1991-12-31 00:00:...|
+|1002|  bk|2001-01-20|2001-01-20 00:00:...|
++----+----+----------+--------------------+
+
+scala> val df3 = data.withColumn("ts", (col("dt").cast("date")))
+df3: org.apache.spark.sql.DataFrame = [no: int, name: string, dt: string, ts: date]
+
+scala> df3.show
++----+----+----------+----------+
+|  no|name|        dt|        ts|
++----+----+----------+----------+
+|1001|  ah|1991-12-31|1991-12-31|
+|1002|  bk|2001-01-20|2001-01-20|
++----+----+----------+----------+
+
+scala> import org.apache.spark.sql.functions.to_date
+import org.apache.spark.sql.functions.to_date
+
+scala> import org.apache.spark.sql.functions.to_timestamp
+<console>:26: error: value to_timestamp is not a member of object org.apache.spark.sql.functions
+         import org.apache.spark.sql.functions.to_timestamp
+                ^
+scala> val df31 = data.withColumn("ts", to_date($"dt"))
+df31: org.apache.spark.sql.DataFrame = [no: int, name: string, dt: string, ts: date]
+
+scala> df31.show
++----+----+----------+----------+
+|  no|name|        dt|        ts|
++----+----+----------+----------+
+|1001|  ah|1991-12-31|1991-12-31|
+|1002|  bk|2001-01-20|2001-01-20|
++----+----+----------+----------+
+                
+```
+
+## aggregateByKey
 
 ```
 scala> val keysWithValuesList = Array("foo=A", "foo=A", "foo=A", "foo=A", "foo=B", "bar=C", "bar=D", "bar=D")
@@ -143,8 +228,7 @@ scala> uniqueByKey.collect
 res4: Array[(String, scala.collection.mutable.HashSet[String])] = Array((foo,Set(B, A)), (bar,Set(C, D)))
 ```
 
-
-##
+## hive warehouse
 
 ```
 
@@ -155,7 +239,7 @@ Found 3 items
 -rw-r--r--   3 ec2-user hive        665 2017-10-27 13:56 /user/hive/warehouse/product_orc_tbl/part-r-00001-5f3f4e4e-2c94-4302-bb4c-9cf5ed6c565b.orc
 ```
 
-##
+## hive commands
 
 ```
 CREATE EXTERNAL TABLE product_test (prodoctid int, productcode string, name string, quantity int, price float) stored as orc location '/user/hive/warehouse/product_orc_tbl';
