@@ -176,6 +176,23 @@ scala> df31.show
                 
 ```
 
+## current_date
+
+```
+scala> val data = sc.parallelize(List((1001, "ah", "1991-12-31"), (1002, "bk", "2001-01-20"), (1003, "cm", "2020-01-10"))).toDF("no", "name", "dt")
+data: org.apache.spark.sql.DataFrame = [no: int, name: string, dt: string]
+
+scala>
+
+scala> data.select('no, to_date('dt) as 'ndt).where('ndt > current_date).show
++----+----------+
+|  no|       ndt|
++----+----------+
+|1003|2020-01-10|
++----+----------+
+
+```
+
 ## aggregateByKey
 
 ```
