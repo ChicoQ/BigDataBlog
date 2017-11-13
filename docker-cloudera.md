@@ -280,4 +280,39 @@ gpgkey = https://archive.cloudera.com/redhat/cdh/RPM-GPG-KEY-cloudera
 gpgcheck = 1
 
 
+## ntpd error
+
+[root@kafka /]# service ntpd start
+Starting ntpd: ntpd: error while loading shared libraries: libm.so.6: cannot open shared object file: Permission denied
+                                                           [FAILED]
+
+[root@kafka /]# service ntpd start
+Starting ntpd: ntpd: error while loading shared libraries: libm.so.6: cannot open shared object file: Permission denied
+                                                           [FAILED]
+[root@kafka /]# 
+[root@kafka /]# ldd /usr/sbin/ntpd
+	linux-vdso.so.1 =>  (0x00007ffd8f3de000)
+	libm.so.6 => /lib64/libm.so.6 (0x00007fe1e368b000)
+	libcrypto.so.10 => /usr/lib64/libcrypto.so.10 (0x00007fe1e32a6000)
+	librt.so.1 => /lib64/librt.so.1 (0x00007fe1e309e000)
+	libcap.so.2 => /lib64/libcap.so.2 (0x00007fe1e2e9a000)
+	libc.so.6 => /lib64/libc.so.6 (0x00007fe1e2b06000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x00007fe1e2902000)
+	libz.so.1 => /lib64/libz.so.1 (0x00007fe1e26ec000)
+	libpthread.so.0 => /lib64/libpthread.so.0 (0x00007fe1e24cf000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fe1e3c1f000)
+	libattr.so.1 => /lib64/libattr.so.1 (0x00007fe1e22ca000)
+[root@kafka /]# 
+[root@kafka /]# ll /lib64/libm.so.6 
+lrwxrwxrwx 1 root root 12 Aug  2 05:15 /lib64/libm.so.6 -> libm-2.12.so
+[root@kafka /]# 
+[root@kafka /]# 
+[root@kafka /]# cat /etc/sysconfig/selinux
+cat: /etc/sysconfig/selinux: No such file or directory
+[root@kafka /]# 
+
+##
+
+
+
 
