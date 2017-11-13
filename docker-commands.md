@@ -65,3 +65,25 @@ sudo docker login
 sudo docker tag b0b47788f8b6 chico77/cdh-kafka
 sudo docker push chico77/cdh-kafka
 
+## timezone
+
+[root@kafka /]# date
+Mon Nov 13 05:42:26 UTC 2017
+[root@kafka /]# 
+[root@kafka /]# 
+[root@kafka /]# cp /etc/localtime /etc/localtime.old
+[root@kafka /]# 
+[root@kafka /]# 
+[root@kafka /]# rm /etc/localtime
+rm: remove regular file `/etc/localtime'? y
+[root@kafka /]# 
+[root@kafka /]# ln -s /usr/share/zoneinfo/Pacific/Auckland /etc/localtime
+[root@kafka /]# 
+[root@kafka /]# 
+[root@kafka /]# date
+Mon Nov 13 18:43:10 NZDT 2017
+[root@kafka /]# 
+[root@kafka /]# 
+[root@kafka /]# ll /etc/localtime
+lrwxrwxrwx 1 root root 36 Nov 13 18:43 /etc/localtime -> /usr/share/zoneinfo/Pacific/Auckland
+[root@kafka /]# 
