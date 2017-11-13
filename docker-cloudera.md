@@ -313,6 +313,25 @@ cat: /etc/sysconfig/selinux: No such file or directory
 
 ##
 
+[root@kafka /]# setenforce 0
+setenforce: SELinux is disabled
+
+[root@kafka /]# reboot
+shutdown: Unable to shutdown system
+
+
+[root@kafka /]# cat /proc/sys/vm/swappiness 
+60
+[root@kafka /]# 
+[root@kafka /]# 
+[root@kafka /]# sysctl vm.swappiness=10
+vm.swappiness = 10
+[root@kafka /]# 
+[root@kafka /]# 
+[root@kafka /]# 
+[root@kafka /]# cat /proc/sys/vm/swappiness 
+10
+[root@kafka /]# 
 
 
 
