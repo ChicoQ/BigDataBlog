@@ -87,3 +87,30 @@ Mon Nov 13 18:43:10 NZDT 2017
 [root@kafka /]# ll /etc/localtime
 lrwxrwxrwx 1 root root 36 Nov 13 18:43 /etc/localtime -> /usr/share/zoneinfo/Pacific/Auckland
 [root@kafka /]# 
+
+##
+
+chico@chico-gtx:~$ sudo docker ps
+[sudo] password for chico: 
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                                                                NAMES
+e35a50481443        4ebb92c5f0e3        "/bin/bash"         About an hour ago   Up About an hour    0.0.0.0:80->80/tcp, 0.0.0.0:7180->7180/tcp, 0.0.0.0:8888->8888/tcp   elated_roentgen
+chico@chico-gtx:~$ 
+chico@chico-gtx:~$ 
+chico@chico-gtx:~$ 
+chico@chico-gtx:~$ 
+chico@chico-gtx:~$ sudo docker commit e35a50481443 chicoqi/cdh-kafka:v3
+sha256:5e5b20ff4c5ab6f7ae98162a2a06ecec3485b5a4abfac156103d512eca928ef9
+chico@chico-gtx:~$ 
+chico@chico-gtx:~$ 
+chico@chico-gtx:~$ sudo docker images
+REPOSITORY             TAG                           IMAGE ID            CREATED             SIZE
+chicoqi/cdh-kafka      v3                            5e5b20ff4c5a        12 seconds ago      11.6GB
+chicoqi/cdh-kafka      v2                            4ebb92c5f0e3        3 hours ago         5.73GB
+chico77/cdh-kafka      latest                        b0b47788f8b6        6 hours ago         3.38GB
+ubuntu                 latest                        14f60031763d        3 months ago        120MB
+hello-world            latest                        48b5124b2768        10 months ago       1.84kB
+cloudera/clusterdock   latest                        3e15a0e12577        14 months ago       463MB
+cloudera/clusterdock   cdh580_cm581_secondary-node   31b6f9ea419e        15 months ago       4.64GB
+cloudera/clusterdock   cdh580_cm581_primary-node     1e180df693af        15 months ago       4.5GB
+chico@chico-gtx:~$ 
+chico@chico-gtx:~$ 
