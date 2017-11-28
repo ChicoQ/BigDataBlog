@@ -270,3 +270,188 @@ ntpdc> quit
  10.65.5.21      192.168.10.70    3 u    4   64    3   27.947   -1.169   1.059
 [root@ip-10-205-227-133 ~]#
 
+yum -y install sendmail
+
+[root@ip-10-205-227-133 ~]# yum list installed | grep net-tools
+net-tools.x86_64              2.0-0.22.20131004git.el7
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# yum list installed | grep crontab
+crontabs.noarch               1.11-6.20121102git.el7
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# systemctl start tuned
+[root@ip-10-205-227-133 ~]# tuned-adm off
+[root@ip-10-205-227-133 ~]# tuned-adm list
+Available profiles:
+- balanced                    - General non-specialized tuned profile
+- desktop                     - Optimize for the desktop use-case
+- latency-performance         - Optimize for deterministic performance at the cost of increased power consumption
+- network-latency             - Optimize for deterministic performance at the cost of increased power consumption, focused on low latency network performance
+- network-throughput          - Optimize for streaming network throughput, generally only necessary on older CPUs or 40G+ networks
+- powersave                   - Optimize for low power consumption
+- throughput-performance      - Broadly applicable tuning that provides excellent performance across a variety of common server workloads
+- virtual-guest               - Optimize for running inside a virtual guest
+- virtual-host                - Optimize for running KVM guests
+No current active profile.
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# systemctl stop tuned
+[root@ip-10-205-227-133 ~]# systemctl disable tuned
+Removed symlink /etc/systemd/system/multi-user.target.wants/tuned.service.
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# echo never > /sys/kernel/mm/transparent_hugepage/enabled
+[root@ip-10-205-227-133 ~]# echo never > /sys/kernel/mm/transparent_hugepage/defrag
+[root@ip-10-205-227-133 ~]# ll /etc/rc.d/rc.local
+-rw-r--r--. 1 root root 473 Jun 27 23:12 /etc/rc.d/rc.local
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# chmod +x /etc/rc.d/rc.local
+[root@ip-10-205-227-133 ~]# ll /etc/rc.d/rc.local
+-rwxr-xr--. 1 root root 473 Jun 27 23:12 /etc/rc.d/rc.local
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# vim /etc/rc.d/rc.local
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# cat /etc/rc.d/rc.local
+#!/bin/bash
+# THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES
+#
+# It is highly advisable to create own systemd services or udev rules
+# to run scripts during boot instead of using this file.
+#
+# In contrast to previous versions due to parallel execution during boot
+# this script will NOT be run after all other services.
+#
+# Please note that you must run 'chmod +x /etc/rc.d/rc.local' to ensure
+# that this script will be executed during boot.
+
+touch /var/lock/subsys/local
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
+[root@ip-10-205-227-133 ~]#
+
+===
+
+[root@ip-10-205-227-133 ~]# cat /sys/kernel/mm/transparent_hugepage/enabled
+always madvise [never]
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# cat /sys/kernel/mm/transparent_hugepage/defrag
+always madvise [never]
+
+===
+
+[root@ip-10-205-227-133 ~]# cat /sys/kernel/mm/transparent_hugepage/enabled
+always madvise [never]
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# cat /sys/kernel/mm/transparent_hugepage/defrag
+always madvise [never]
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# cat /proc/sys/vm/swappiness
+60
+[root@ip-10-205-227-133 ~]# sysctl -w vm.swappiness=1
+vm.swappiness = 1
+[root@ip-10-205-227-133 ~]# cat /proc/sys/vm/swappiness
+1
+
+===
+
+[root@ip-10-205-227-133 ~]# getenforce
+Permissive
+[root@ip-10-205-227-133 ~]# vim /etc/selinux/config
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# cat /etc/selinux/config
+
+# This file controls the state of SELinux on the system.
+# SELINUX= can take one of these three values:
+#     enforcing - SELinux security policy is enforced.
+#     permissive - SELinux prints warnings instead of enforcing.
+#     disabled - No SELinux policy is loaded.
+SELINUX=permissive
+# SELINUXTYPE= can take one of three two values:
+#     targeted - Targeted processes are protected,
+#     minimum - Modification of targeted policy. Only selected processes are protected.
+#     mls - Multi Level Security protection.
+SELINUXTYPE=targeted
+
+
+[root@ip-10-205-227-133 ~]# setenforce 0
+[root@ip-10-205-227-133 ~]# getenforce
+Permissive
+
+===
+
+[root@ip-10-205-227-133 ~]# yum list installed | grep nscd
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# yum install -y nscd
+Loaded plugins: amazon-id, rhui-lb, search-disabled-repos
+Failed to get region name from EC2
+Resolving Dependencies
+--> Running transaction check
+---> Package nscd.x86_64 0:2.17-196.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+=============================================================================================================================================================================
+
+ Package                         Arch                              Version                                 Repository                                                   Size =============================================================================================================================================================================
+
+Installing:
+ nscd                            x86_64                            2.17-196.el7                            rhui-REGION-rhel-server-releases                            273 k
+
+Transaction Summary
+=============================================================================================================================================================================
+
+Install  1 Package
+
+Total download size: 273 k
+Installed size: 184 k
+Downloading packages:
+nscd-2.17-196.el7.x86_64.rpm                                                                                                                          | 273 kB  00:00:00
+
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : nscd-2.17-196.el7.x86_64                                                                                                                                  1/1
+
+  Verifying  : nscd-2.17-196.el7.x86_64                                                                                                                                  1/1
+
+
+Installed:
+  nscd.x86_64 0:2.17-196.el7
+
+
+Complete!
+[root@ip-10-205-227-133 ~]# service nscd status
+Redirecting to /bin/systemctl status nscd.service
+● nscd.service - Name Service Cache Daemon
+   Loaded: loaded (/usr/lib/systemd/system/nscd.service; disabled; vendor preset: disabled)
+   Active: inactive (dead)
+[root@ip-10-205-227-133 ~]# systemctl service nscd
+Unknown operation 'service'.
+[root@ip-10-205-227-133 ~]# systemctl start nscd
+[root@ip-10-205-227-133 ~]# systemctl status nscd
+● nscd.service - Name Service Cache Daemon
+   Loaded: loaded (/usr/lib/systemd/system/nscd.service; disabled; vendor preset: disabled)
+   Active: active (running) since Wed 2017-11-29 11:04:44 NZDT; 17s ago
+  Process: 21501 ExecStart=/usr/sbin/nscd $NSCD_OPTIONS (code=exited, status=0/SUCCESS)
+ Main PID: 21502 (nscd)
+   CGroup: /system.slice/nscd.service
+           └─21502 /usr/sbin/nscd
+
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 monitoring file `/etc/hosts` (4)
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 monitoring directory `/etc` (2)
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 monitoring file `/etc/resolv.conf` (5)
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 monitoring directory `/etc` (2)
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 monitoring file `/etc/services` (6)
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 monitoring directory `/etc` (2)
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 disabled inotify-based monitoring for file `/etc/netgroup': No such file or directory
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 stat failed for file `/etc/netgroup'; will try again later: No such file or directory
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 Access Vector Cache (AVC) started
+Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz systemd[1]: Started Name Service Cache Daemon.
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# systemctl enable nscd
+Created symlink from /etc/systemd/system/multi-user.target.wants/nscd.service to /usr/lib/systemd/system/nscd.service.
+Created symlink from /etc/systemd/system/sockets.target.wants/nscd.socket to /usr/lib/systemd/system/nscd.socket.
+
+===
+
