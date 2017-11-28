@@ -454,4 +454,38 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/nscd.service to
 Created symlink from /etc/systemd/system/sockets.target.wants/nscd.socket to /usr/lib/systemd/system/nscd.socket.
 
 ===
+[root@ip-10-205-227-133 ~]# yum install -y wget
+Loaded plugins: amazon-id, rhui-lb, search-disabled-repos
+Failed to get region name from EC2
+Package wget-1.14-15.el7_4.1.x86_64 already installed and latest version
+Nothing to do
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.43.tar.gz
+--2017-11-29 11:08:34--  https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.43.tar.gz
+Resolving internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com (internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com)... 10.205.227.218, 10.205.227.188, 10.205.227.138
+Connecting to internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com (internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com)|10.205.227.218|:3128... connected.
+Proxy tunneling failed: ForbiddenUnable to establish SSL connection.
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# ll
+total 32
+-rw-------. 1 root root  7497 Jul 12 04:11 anaconda-ks.cfg
+-rw-------. 1 root root  6689 Jul 12 04:11 original-ks.cfg
+-rwxr-x---. 1 root root 12795 Nov 29 10:44 prereq-check-single.sh
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]#
+[root@ip-10-205-227-133 ~]# wget http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44-sources.jar
+--2017-11-29 11:09:36--  http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44-sources.jar
+Resolving internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com (internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com)... 10.205.227.218, 10.205.227.188, 10.205.227.138
+Connecting to internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com (internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com)|10.205.227.218|:3128... connected.
+Proxy request sent, awaiting response... 403 Forbidden
+2017-11-29 11:09:36 ERROR 403: Forbidden.
+
+===
+https://mvnrepository.com/artifact/mysql/mysql-connector-java/5.1.44
+
+scp -i Downloads\DirectorProd1.pem Downloads\mysql-connector-java-5.1.44.jar cloudera-scm@10.205.227.133:~
+
+
 
