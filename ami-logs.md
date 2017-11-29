@@ -224,9 +224,10 @@ server 10.65.5.21   # added by /sbin/dhclient-script
 
 ## start ntpd
 
+```
 [root@ip-10-205-227-133 ~]# service ntpd start
 Redirecting to /bin/systemctl start ntpd.service
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# service ntpd status
 Redirecting to /bin/systemctl status ntpd.service
 ● ntpd.service - Network Time Service
@@ -271,21 +272,22 @@ ntpdc> quit
 ==============================================================================
  10.65.5.20      192.168.10.72    3 u    3   64    3   27.719   -1.175   1.080
  10.65.5.21      192.168.10.70    3 u    4   64    3   27.947   -1.169   1.059
+```
 
 ## sendmail
 
 yum -y install sendmail
 
 ## net-tools, crontab
-
+```
 [root@ip-10-205-227-133 ~]# yum list installed | grep net-tools
 net-tools.x86_64              2.0-0.22.20131004git.el7
 
 [root@ip-10-205-227-133 ~]# yum list installed | grep crontab
 crontabs.noarch               1.11-6.20121102git.el7
-
+```
 ## tuned
-
+```
 [root@ip-10-205-227-133 ~]# systemctl start tuned
 [root@ip-10-205-227-133 ~]# tuned-adm off
 [root@ip-10-205-227-133 ~]# tuned-adm list
@@ -304,9 +306,10 @@ No current active profile.
 [root@ip-10-205-227-133 ~]# systemctl stop tuned
 [root@ip-10-205-227-133 ~]# systemctl disable tuned
 Removed symlink /etc/systemd/system/multi-user.target.wants/tuned.service.
+```
 
 ## transparent hugepage
-
+```
 [root@ip-10-205-227-133 ~]# echo never > /sys/kernel/mm/transparent_hugepage/enabled
 [root@ip-10-205-227-133 ~]# echo never > /sys/kernel/mm/transparent_hugepage/defrag
 [root@ip-10-205-227-133 ~]# ll /etc/rc.d/rc.local
@@ -315,10 +318,11 @@ Removed symlink /etc/systemd/system/multi-user.target.wants/tuned.service.
 [root@ip-10-205-227-133 ~]# chmod +x /etc/rc.d/rc.local
 [root@ip-10-205-227-133 ~]# ll /etc/rc.d/rc.local
 -rwxr-xr--. 1 root root 473 Jun 27 23:12 /etc/rc.d/rc.local
-
-[root@ip-10-205-227-133 ~]# vim /etc/rc.d/rc.local
+```
 
 ```
+[root@ip-10-205-227-133 ~]# vim /etc/rc.d/rc.local
+
 [root@ip-10-205-227-133 ~]# cat /etc/rc.d/rc.local
 #!/bin/bash
 # THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES
@@ -339,6 +343,7 @@ echo never > /sys/kernel/mm/transparent_hugepage/defrag
 
 ===
 
+```
 [root@ip-10-205-227-133 ~]# cat /sys/kernel/mm/transparent_hugepage/enabled
 always madvise [never]
 
@@ -361,12 +366,13 @@ always madvise [never]
 vm.swappiness = 1
 [root@ip-10-205-227-133 ~]# cat /proc/sys/vm/swappiness
 1
-
+```
 ===
-
+```
 [root@ip-10-205-227-133 ~]# getenforce
 Permissive
 [root@ip-10-205-227-133 ~]# vim /etc/selinux/config
+```
 
 ```
 [root@ip-10-205-227-133 ~]# cat /etc/selinux/config
@@ -383,13 +389,15 @@ SELINUX=permissive
 #     mls - Multi Level Security protection.
 SELINUXTYPE=targeted
 ```
-
+===
+```
 [root@ip-10-205-227-133 ~]# setenforce 0
 [root@ip-10-205-227-133 ~]# getenforce
 Permissive
+```
 
 ## nscd
-
+```
 [root@ip-10-205-227-133 ~]# yum list installed | grep nscd
 
 [root@ip-10-205-227-133 ~]# yum install -y nscd
@@ -465,9 +473,10 @@ Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz systemd[1]: Started Name Service C
 [root@ip-10-205-227-133 ~]# systemctl enable nscd
 Created symlink from /etc/systemd/system/multi-user.target.wants/nscd.service to /usr/lib/systemd/system/nscd.service.
 Created symlink from /etc/systemd/system/sockets.target.wants/nscd.socket to /usr/lib/systemd/system/nscd.socket.
+```
 
 ## wget
-
+```
 [root@ip-10-205-227-133 ~]# yum install -y wget
 Loaded plugins: amazon-id, rhui-lb, search-disabled-repos
 Failed to get region name from EC2
@@ -492,7 +501,7 @@ Resolving internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb
 Connecting to internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com (internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com)|10.205.227.218|:3128... connected.
 Proxy request sent, awaiting response... 403 Forbidden
 2017-11-29 11:09:36 ERROR 403: Forbidden.
-
+```
 ===
 https://mvnrepository.com/artifact/mysql/mysql-connector-java/5.1.44
 
@@ -500,7 +509,7 @@ scp -i Downloads\DirectorProd1.pem Downloads\mysql-connector-java-5.1.44.jar clo
 
 
 ## jdk 1.8
-
+```
 mv /home/cloudera-scm/Downloads\\jce_policy-8.zip jce_policy-8.zip
 mv /home/cloudera-scm/Downloads\\jdk-8u144-linux-x64.tar.gz jdk-8u144-linux-x64.tar.gz
 
@@ -508,7 +517,8 @@ tar xvzf jdk-8u144-linux-x64.tar.gz -C /usr/java/
 
 [root@ip-10-205-227-133 ~]# chmod -R 777 /usr/java/jdk1.8.0_144/
 [root@ip-10-205-227-133 ~]# chown -R root:root /usr/java/jdk1.8.0_144/
-
+```
+===
 ```
 [root@ip-10-205-227-133 ~]# cat /etc/profile
 # /etc/profile
@@ -594,6 +604,7 @@ export JAVA_HOME=/usr/java/jdk1.8.0_144
 export PATH=$JAVA_HOME/bin:$PATH
 ```
 
+```
 [root@ip-10-205-227-133 ~]# ll
 total 182192
 -rw-------. 1 root root      7497 Jul 12 04:11 anaconda-ks.cfg
@@ -610,9 +621,10 @@ total 182192
 -rw-r-----. 1 root root 999632 Nov 29 11:12 mysql-connector-java-5.1.44.jar
 lrwxrwxrwx. 1 root root     31 Nov 29 13:28 mysql-connector-java.jar -> mysql-connector-java-5.1.44.jar
 -rw-r--r--. 1 root root 883899 Dec 29  2013 mysql-connector-java.jar.old
+```
 
 ## unzip
-
+```
 [root@ip-10-205-227-133 java]# yum install -y unzip
 Loaded plugins: amazon-id, rhui-lb, search-disabled-repos
 Failed to get region name from EC2
@@ -706,6 +718,7 @@ cp: overwrite ‘/usr/java/jdk1.8.0_144/jre/lib/security/US_export_policy.jar’
 -bash: /bin/jrunscript: No such file or directory
 [root@ip-10-205-227-133 UnlimitedJCEPolicyJDK8]#
 [root@ip-10-205-227-133 UnlimitedJCEPolicyJDK8]# echo $JAVA_HOME
+```
 
 ## create new console
 
@@ -742,6 +755,7 @@ echo never > /sys/kernel/mm/transparent_hugepage/enabled
 echo never > /sys/kernel/mm/transparent_hugepage/defrag
 ```
 
+```
 [root@ip-10-205-227-133 ~]# service ntpd status
 Redirecting to /bin/systemctl status ntpd.service
 ● ntpd.service - Network Time Service
@@ -800,6 +814,7 @@ vm.swappiness = 1
 
 [root@ip-10-205-227-133 ~]# cat /proc/sys/vm/swappiness
 1
+```
 
 ```
 [root@ip-10-205-227-133 ~]# cat /etc/selinux/config
@@ -817,6 +832,7 @@ SELINUX=permissive
 SELINUXTYPE=targeted
 ```
 
+```
 [root@ip-10-205-227-133 ~]# getenforce
 Permissive
 [root@ip-10-205-227-133 ~]# service nscd status
@@ -846,6 +862,7 @@ Nov 29 13:40:18 ip-10-205-227-133.airnz.co.nz nscd[522]: 522 checking for monito
 [root@ip-10-205-227-133 ~]#
 [root@ip-10-205-227-133 ~]# $JAVA_HOME/bin/jrunscript -e 'print (javax.crypto.Cipher.getMaxAllowedKeyLength("RC5") >= 256);'
 true
+```
 
 ## run the check script
 
