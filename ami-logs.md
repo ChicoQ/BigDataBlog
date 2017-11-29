@@ -1,4 +1,6 @@
+## check script
 
+```
 [root@ip-10-205-227-133 ~]# ./prereq-check-single.sh
 Cloudera Manager & CDH Prerequisites Checks v1.0.1
 
@@ -88,11 +90,11 @@ Note: This output shows SysV services only and does not include native
  PASS  /tmp Mount Size: Looks OK [30 G].
  PASS  /opt Mount Size: Looks OK [30 G].
  PASS  Ulimit FSize: Looks OK. NO Entry for fsize.
+```
 
-===
+## ntp config
 
-##
-
+```
 [root@ip-10-205-44-115 ~]# cat /etc/ntp.conf
 # For more information about this file, see the man pages
 # ntp.conf(5), ntp_acc(5), ntp_auth(5), ntp_clock(5), ntp_misc(5), ntp_mon(5).
@@ -151,8 +153,9 @@ keys /etc/ntp/keys
 # CVE-2013-5211 for more details.
 # Note: Monitoring will not be disabled with the limited restriction flag.
 disable monitor
+```
 
-===
+```
 [root@ip-10-205-227-133 ~]# cat /etc/ntp.conf
 # For more information about this file, see the man pages
 # ntp.conf(5), ntp_acc(5), ntp_auth(5), ntp_clock(5), ntp_misc(5), ntp_mon(5).
@@ -217,9 +220,9 @@ keys /etc/ntp/keys
 disable monitor
 server 10.65.5.20   # added by /sbin/dhclient-script
 server 10.65.5.21   # added by /sbin/dhclient-script
+```
 
-
-
+## start ntpd
 
 [root@ip-10-205-227-133 ~]# service ntpd start
 Redirecting to /bin/systemctl start ntpd.service
@@ -244,40 +247,45 @@ Nov 29 10:50:17 ip-10-205-227-133.airnz.co.nz ntpd[21168]: Listening on routing 
 Nov 29 10:50:17 ip-10-205-227-133.airnz.co.nz ntpd[21168]: 0.0.0.0 c016 06 restart
 Nov 29 10:50:17 ip-10-205-227-133.airnz.co.nz ntpd[21168]: 0.0.0.0 c012 02 freq_set kernel 0.000 PPM
 Nov 29 10:50:17 ip-10-205-227-133.airnz.co.nz ntpd[21168]: 0.0.0.0 c011 01 freq_not_set
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# systemctl enable ntpd
 Created symlink from /etc/systemd/system/multi-user.target.wants/ntpd.service to /usr/lib/systemd/system/ntpd.service.
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# ntpdc
 ntpdc> peer
      remote           local      st poll reach  delay   offset    disp
 =======================================================================
 =10.65.5.20      10.205.227.133   3   64    1 0.02783 -0.000095 2.81735
 =10.65.5.21      10.205.227.133   3   64    1 0.02789 -0.000109 2.81735
-ntpdc>
+
 ntpdc> peers
      remote           local      st poll reach  delay   offset    disp
 =======================================================================
 =10.65.5.20      10.205.227.133   3   64    1 0.02783 -0.000095 2.81735
 =10.65.5.21      10.205.227.133   3   64    1 0.02789 -0.000109 2.81735
-ntpdc>
+
 ntpdc> quit
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# ntpq -np
      remote           refid      st t when poll reach   delay   offset  jitter
 ==============================================================================
  10.65.5.20      192.168.10.72    3 u    3   64    3   27.719   -1.175   1.080
  10.65.5.21      192.168.10.70    3 u    4   64    3   27.947   -1.169   1.059
-[root@ip-10-205-227-133 ~]#
+
+## sendmail
 
 yum -y install sendmail
 
+## net-tools, crontab
+
 [root@ip-10-205-227-133 ~]# yum list installed | grep net-tools
 net-tools.x86_64              2.0-0.22.20131004git.el7
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# yum list installed | grep crontab
 crontabs.noarch               1.11-6.20121102git.el7
-[root@ip-10-205-227-133 ~]#
+
+## tuned
+
 [root@ip-10-205-227-133 ~]# systemctl start tuned
 [root@ip-10-205-227-133 ~]# tuned-adm off
 [root@ip-10-205-227-133 ~]# tuned-adm list
@@ -292,24 +300,25 @@ Available profiles:
 - virtual-guest               - Optimize for running inside a virtual guest
 - virtual-host                - Optimize for running KVM guests
 No current active profile.
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# systemctl stop tuned
 [root@ip-10-205-227-133 ~]# systemctl disable tuned
 Removed symlink /etc/systemd/system/multi-user.target.wants/tuned.service.
-[root@ip-10-205-227-133 ~]#
+
+## transparent hugepage
+
 [root@ip-10-205-227-133 ~]# echo never > /sys/kernel/mm/transparent_hugepage/enabled
 [root@ip-10-205-227-133 ~]# echo never > /sys/kernel/mm/transparent_hugepage/defrag
 [root@ip-10-205-227-133 ~]# ll /etc/rc.d/rc.local
 -rw-r--r--. 1 root root 473 Jun 27 23:12 /etc/rc.d/rc.local
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# chmod +x /etc/rc.d/rc.local
 [root@ip-10-205-227-133 ~]# ll /etc/rc.d/rc.local
 -rwxr-xr--. 1 root root 473 Jun 27 23:12 /etc/rc.d/rc.local
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# vim /etc/rc.d/rc.local
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
+```
 [root@ip-10-205-227-133 ~]# cat /etc/rc.d/rc.local
 #!/bin/bash
 # THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES
@@ -326,13 +335,13 @@ Removed symlink /etc/systemd/system/multi-user.target.wants/tuned.service.
 touch /var/lock/subsys/local
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 echo never > /sys/kernel/mm/transparent_hugepage/defrag
-[root@ip-10-205-227-133 ~]#
+```
 
 ===
 
 [root@ip-10-205-227-133 ~]# cat /sys/kernel/mm/transparent_hugepage/enabled
 always madvise [never]
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# cat /sys/kernel/mm/transparent_hugepage/defrag
 always madvise [never]
 
@@ -340,10 +349,12 @@ always madvise [never]
 
 [root@ip-10-205-227-133 ~]# cat /sys/kernel/mm/transparent_hugepage/enabled
 always madvise [never]
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# cat /sys/kernel/mm/transparent_hugepage/defrag
 always madvise [never]
-[root@ip-10-205-227-133 ~]#
+
+## swappiness
+
 [root@ip-10-205-227-133 ~]# cat /proc/sys/vm/swappiness
 60
 [root@ip-10-205-227-133 ~]# sysctl -w vm.swappiness=1
@@ -356,7 +367,8 @@ vm.swappiness = 1
 [root@ip-10-205-227-133 ~]# getenforce
 Permissive
 [root@ip-10-205-227-133 ~]# vim /etc/selinux/config
-[root@ip-10-205-227-133 ~]#
+
+```
 [root@ip-10-205-227-133 ~]# cat /etc/selinux/config
 
 # This file controls the state of SELinux on the system.
@@ -370,16 +382,16 @@ SELINUX=permissive
 #     minimum - Modification of targeted policy. Only selected processes are protected.
 #     mls - Multi Level Security protection.
 SELINUXTYPE=targeted
-
+```
 
 [root@ip-10-205-227-133 ~]# setenforce 0
 [root@ip-10-205-227-133 ~]# getenforce
 Permissive
 
-===
+## nscd
 
 [root@ip-10-205-227-133 ~]# yum list installed | grep nscd
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# yum install -y nscd
 Loaded plugins: amazon-id, rhui-lb, search-disabled-repos
 Failed to get region name from EC2
@@ -421,6 +433,7 @@ Installed:
 
 
 Complete!
+
 [root@ip-10-205-227-133 ~]# service nscd status
 Redirecting to /bin/systemctl status nscd.service
 ● nscd.service - Name Service Cache Daemon
@@ -448,33 +461,31 @@ Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 disabled inotif
 Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 stat failed for file `/etc/netgroup'; will try again later: No such file or directory
 Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz nscd[21502]: 21502 Access Vector Cache (AVC) started
 Nov 29 11:04:44 ip-10-205-227-133.airnz.co.nz systemd[1]: Started Name Service Cache Daemon.
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# systemctl enable nscd
 Created symlink from /etc/systemd/system/multi-user.target.wants/nscd.service to /usr/lib/systemd/system/nscd.service.
 Created symlink from /etc/systemd/system/sockets.target.wants/nscd.socket to /usr/lib/systemd/system/nscd.socket.
 
-===
+## wget
+
 [root@ip-10-205-227-133 ~]# yum install -y wget
 Loaded plugins: amazon-id, rhui-lb, search-disabled-repos
 Failed to get region name from EC2
 Package wget-1.14-15.el7_4.1.x86_64 already installed and latest version
 Nothing to do
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.43.tar.gz
 --2017-11-29 11:08:34--  https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.43.tar.gz
 Resolving internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com (internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com)... 10.205.227.218, 10.205.227.188, 10.205.227.138
 Connecting to internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com (internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com)|10.205.227.218|:3128... connected.
 Proxy tunneling failed: ForbiddenUnable to establish SSL connection.
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# ll
 total 32
 -rw-------. 1 root root  7497 Jul 12 04:11 anaconda-ks.cfg
 -rw-------. 1 root root  6689 Jul 12 04:11 original-ks.cfg
 -rwxr-x---. 1 root root 12795 Nov 29 10:44 prereq-check-single.sh
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# wget http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44-sources.jar
 --2017-11-29 11:09:36--  http://central.maven.org/maven2/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44-sources.jar
 Resolving internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com (internal-prod-core-applicat-m9rtj9hdhdea-2131951945.ap-southeast-2.elb.amazonaws.com)... 10.205.227.218, 10.205.227.188, 10.205.227.138
@@ -488,7 +499,7 @@ https://mvnrepository.com/artifact/mysql/mysql-connector-java/5.1.44
 scp -i Downloads\DirectorProd1.pem Downloads\mysql-connector-java-5.1.44.jar cloudera-scm@10.205.227.133:~
 
 
-##
+## jdk 1.8
 
 mv /home/cloudera-scm/Downloads\\jce_policy-8.zip jce_policy-8.zip
 mv /home/cloudera-scm/Downloads\\jdk-8u144-linux-x64.tar.gz jdk-8u144-linux-x64.tar.gz
@@ -498,6 +509,7 @@ tar xvzf jdk-8u144-linux-x64.tar.gz -C /usr/java/
 [root@ip-10-205-227-133 ~]# chmod -R 777 /usr/java/jdk1.8.0_144/
 [root@ip-10-205-227-133 ~]# chown -R root:root /usr/java/jdk1.8.0_144/
 
+```
 [root@ip-10-205-227-133 ~]# cat /etc/profile
 # /etc/profile
 
@@ -580,8 +592,8 @@ export https_proxy=internal-prod-core-Applicat-M9RTJ9HDHDEA-2131951945.ap-southe
 
 export JAVA_HOME=/usr/java/jdk1.8.0_144
 export PATH=$JAVA_HOME/bin:$PATH
+```
 
-===
 [root@ip-10-205-227-133 ~]# ll
 total 182192
 -rw-------. 1 root root      7497 Jul 12 04:11 anaconda-ks.cfg
@@ -590,7 +602,7 @@ total 182192
 -rw-r-----. 1 root root    999632 Nov 29 11:12 mysql-connector-java-5.1.44.jar
 -rw-------. 1 root root      6689 Jul 12 04:11 original-ks.cfg
 -rwxr-x---. 1 root root     12795 Nov 29 10:44 prereq-check-single.sh
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# mv mysql-connector-java-5.1.44.jar /usr/share/java
 
 [root@ip-10-205-227-133 java]# ln -s mysql-connector-java-5.1.44.jar mysql-connector-java.jar
@@ -599,7 +611,7 @@ total 182192
 lrwxrwxrwx. 1 root root     31 Nov 29 13:28 mysql-connector-java.jar -> mysql-connector-java-5.1.44.jar
 -rw-r--r--. 1 root root 883899 Dec 29  2013 mysql-connector-java.jar.old
 
-===
+## unzip
 
 [root@ip-10-205-227-133 java]# yum install -y unzip
 Loaded plugins: amazon-id, rhui-lb, search-disabled-repos
@@ -706,13 +718,12 @@ true
 
 [root@ip-10-205-227-133 ~]# reboot
 
-===
+## double check
+
 [cloudera-scm@ip-10-205-227-133 ~]$ sudo su -
 Last login: Wed Nov 29 13:32:58 NZDT 2017 on pts/1
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
+```
 [root@ip-10-205-227-133 ~]# cat /etc/rc.d/rc.local
 #!/bin/bash
 # THIS FILE IS ADDED FOR COMPATIBILITY PURPOSES
@@ -729,31 +740,25 @@ Last login: Wed Nov 29 13:32:58 NZDT 2017 on pts/1
 touch /var/lock/subsys/local
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 echo never > /sys/kernel/mm/transparent_hugepage/defrag
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+```
+
 [root@ip-10-205-227-133 ~]# service ntpd status
 Redirecting to /bin/systemctl status ntpd.service
 ● ntpd.service - Network Time Service
    Loaded: loaded (/usr/lib/systemd/system/ntpd.service; enabled; vendor preset: disabled)
    Active: inactive (dead)
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# ntpdc
 ntpdc> peers
 ntpdc: read: Connection refused
-ntpdc>
-ntpdc>
+
 ntpdc> quit
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# service ntpd start
 Redirecting to /bin/systemctl start ntpd.service
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# systemctl enable ntpd
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# service ntpd status
 Redirecting to /bin/systemctl status ntpd.service
 ● ntpd.service - Network Time Service
@@ -773,32 +778,30 @@ Nov 29 13:48:35 ip-10-205-227-133.airnz.co.nz ntpd[10623]: Listen normally on 3 
 Nov 29 13:48:35 ip-10-205-227-133.airnz.co.nz ntpd[10623]: Listening on routing socket on fd #20 for interface updates
 Nov 29 13:48:35 ip-10-205-227-133.airnz.co.nz ntpd[10623]: 0.0.0.0 c016 06 restart
 Nov 29 13:48:35 ip-10-205-227-133.airnz.co.nz ntpd[10623]: 0.0.0.0 c012 02 freq_set kernel -16.938 PPM
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# ntpdc
 ntpdc> peers
      remote           local      st poll reach  delay   offset    disp
 =======================================================================
 =10.65.5.20      10.205.227.133   3   64    1 0.02766 -0.000058 2.81735
 =10.65.5.21      10.205.227.133   3   64    1 0.02805  0.000191 2.81735
-ntpdc>
 ntpdc> quit
 [root@ip-10-205-227-133 ~]# ntpq -np
      remote           refid      st t when poll reach   delay   offset  jitter
 ==============================================================================
  10.65.5.20      192.168.10.70    3 u   57   64    1   27.676   -0.058   0.000
  10.65.5.21      192.168.10.72    3 u   56   64    1   28.055    0.191   0.000
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# cat /proc/sys/vm/swappiness
 60
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# sysctl -w vm.swappiness=1
 vm.swappiness = 1
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# cat /proc/sys/vm/swappiness
 1
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
+```
 [root@ip-10-205-227-133 ~]# cat /etc/selinux/config
 
 # This file controls the state of SELinux on the system.
@@ -812,11 +815,10 @@ SELINUX=permissive
 #     minimum - Modification of targeted policy. Only selected processes are protected.
 #     mls - Multi Level Security protection.
 SELINUXTYPE=targeted
-
+```
 
 [root@ip-10-205-227-133 ~]# getenforce
 Permissive
-[root@ip-10-205-227-133 ~]#
 [root@ip-10-205-227-133 ~]# service nscd status
 Redirecting to /bin/systemctl status nscd.service
 ● nscd.service - Name Service Cache Daemon
@@ -836,8 +838,7 @@ Nov 29 13:39:59 ip-10-205-227-133.airnz.co.nz systemd[1]: Started Name Service C
 Nov 29 13:39:59 ip-10-205-227-133.airnz.co.nz nscd[522]: 522 monitored file `/etc/resolv.conf` was moved into place, adding watch
 Nov 29 13:39:59 ip-10-205-227-133.airnz.co.nz nscd[522]: 522 ignored inotify event for `/etc/resolv.conf` (file exists)
 Nov 29 13:40:18 ip-10-205-227-133.airnz.co.nz nscd[522]: 522 checking for monitored file `/etc/netgroup': No such file or directory
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# systemctl status tuned
 ● tuned.service - Dynamic System Tuning Daemon
    Loaded: loaded (/usr/lib/systemd/system/tuned.service; disabled; vendor preset: enabled)
@@ -846,8 +847,9 @@ Nov 29 13:40:18 ip-10-205-227-133.airnz.co.nz nscd[522]: 522 checking for monito
 [root@ip-10-205-227-133 ~]# $JAVA_HOME/bin/jrunscript -e 'print (javax.crypto.Cipher.getMaxAllowedKeyLength("RC5") >= 256);'
 true
 
-===
+## run the check script
 
+```
 [root@ip-10-205-227-133 ~]# ./prereq-check-single.sh
 Cloudera Manager & CDH Prerequisites Checks v1.0.1
 
@@ -937,8 +939,9 @@ Note: This output shows SysV services only and does not include native
  PASS  /tmp Mount Size: Looks OK [30 G].
  PASS  /opt Mount Size: Looks OK [30 G].
  PASS  Ulimit FSize: Looks OK. NO Entry for fsize.
+```
 
-===
+## scp
 scp -i DirectorProd1.pem prereq-checks-master.zip cloudera-scm@10.205.227.133:~
 
 
