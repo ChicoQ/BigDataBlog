@@ -1,5 +1,6 @@
+## run the check script
 
-
+```
 [root@ip-10-205-227-133 prereq-checks-master]# ./prereq-check.sh
 Cloudera Manager & CDH Prerequisites Checks v1.4.4
 
@@ -63,8 +64,11 @@ Prerequisite checks
  WARN  Database: MySQL server not installed, skipping version check
  PASS  Database: MySQL JDBC Driver is installed
 
-===
+```
 
+## ntpd
+
+```
 [root@ip-10-205-227-133 ~]# ntpdc
 ntpdc> peers
      remote           local      st poll reach  delay   offset    disp
@@ -72,8 +76,7 @@ ntpdc> peers
 =10.65.5.20      10.205.227.133   3   64  377 0.02776 -0.000021 0.06345
 *10.65.5.21      10.205.227.133   3   64  377 0.02792  0.000254 0.04503
 ntpdc> quit
-[root@ip-10-205-227-133 ~]#
-[root@ip-10-205-227-133 ~]#
+
 [root@ip-10-205-227-133 ~]# ntpq -np
      remote           refid      st t when poll reach   delay   offset  jitter
 ==============================================================================
@@ -89,13 +92,12 @@ ntpdc> peers
 =ntp2.airnz.co.n 10.205.44.115    3 1024  377 0.02783  0.000079 0.12460
 *ntp4.airnz.co.n 10.205.44.115    3 1024  377 0.02847  0.000203 0.13875
 ntpdc> quit
-[root@ip-10-205-44-115 ~]#
-[root@ip-10-205-44-115 ~]#
+
 [root@ip-10-205-44-115 ~]# ntpq -np
      remote           refid      st t when poll reach   delay   offset  jitter
 ==============================================================================
 +10.65.5.20      192.168.10.70    3 u  115 1024  377   27.846    0.079   0.260
 *10.65.5.21      192.168.10.72    3 u  860 1024  377   28.482    0.203   0.137
-[root@ip-10-205-44-115 ~]#
 
-===
+```
+
