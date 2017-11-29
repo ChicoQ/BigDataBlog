@@ -60,5 +60,21 @@ https://www.cloudera.com/documentation/enterprise/latest/topics/install_cdh_disa
 - Restart your system or run the following command to disable SELinux immediately
 `setenforce 0`
 
+## java related
+
+- downloaded `jce_policy-8.zip` and `jdk-8u144-linux-x64.tar.gz` from Oracle website and untar under `/usr/java/`
+- add following to `/etc/profile`
+```
+export JAVA_HOME=/usr/java/jdk1.8.0_144
+export PATH=$JAVA_HOME/bin:$PATH
+```
+
+## mysql driver
+
+- download `mysql-connector-java-5.1.44.jar` from https://mvnrepository.com/artifact/mysql/mysql-connector-java/5.1.44
+- copied above jar file into `/usr/share/java` and created a link
+```
+ln -s mysql-connector-java-5.1.44.jar mysql-connector-java.jar
+```
 
 
