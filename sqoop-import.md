@@ -2,9 +2,9 @@
 sqoop import \
 --connect jdbc:mysql://172.29.1.12/test \
 --username root -P \
--table=accountdevice \
--where "account_id between 1 and 10" \
--hive-import \
+--table=accountdevice \
+--where "account_id between 1 and 10" \
+--hive-import \
 -m 1
 
 0: jdbc:hive2://172.29.1.202:10000/default> SELECT * FROM accountdevice;
