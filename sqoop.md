@@ -31,6 +31,8 @@ sqoop import-all-tables \
 --compression-codec org.apache.hadoop.io.compress.SnappyCodec \
 --warehouse-dir /loudacre/accounts_hive
 
+```
+
 - It was not necessary to set 'warehouse-dir' because the final data was stored into /user/hive/warehouse/testhive.db automatically.
 
 - Sqoop first imports the data to a temporary location in HDFS.  It then generates a query for creating a table and also anohter query for loading the data from the temporary HDFS location, using the Hive `load data inpath` statement to move the data into the Hive warehouse directory in HDFS.  You can specify the temporary location with either the `--target-dir` parameter or the `--warehouse-dir` parameter.
@@ -41,7 +43,6 @@ sqoop import-all-tables \
 - Make sure the directory you specify with the `--target-dir` parameter doesn't already exist in HDFS.  Otherwise sqoop will throw an error, just as Hadoop does when a MapReduce output directory is already present.
 - If you don't want to use your HDFS home directory, you can specify that all sqoop imports go into a special directory with the parameter `--warehouse-dir`.  Sqoop will then load the imported data under the directory you specify for the `--warehouse-dir` parameter, in a subdirectory named the same as the imported table.  Make sure you don't use the Hive warehouse directory, which is `/user/hive/warehouse` by default, for your temporary location.
 
-```
 
 ```
 sqoop import
