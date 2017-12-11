@@ -463,35 +463,65 @@ http://arun-teaches-u-tech.blogspot.co.nz/p/file-formats.html
 ## Sqoop commands
 
 ```
-[cloudera@quickstart ~]$ sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop5 --as-avrodatafile --compression-codec org.apache.hadoop.io.compress.GzipCodec
+[cloudera@quickstart ~]$ 
+sqoop import --connect jdbc:mysql://quickstart/cm \
+--username root --password cloudera \
+--table USERS \
+--target-dir /user/cloudera/sqoop5 \
+--as-avrodatafile \
+--compression-codec org.apache.hadoop.io.compress.GzipCodec
+
 Error: org.apache.avro.AvroRuntimeException: Unrecognized codec: gzip
 
 
 
-sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop
+sqoop import --connect jdbc:mysql://quickstart/cm \
+--username root --password cloudera \
+--table USERS \
+--target-dir /user/cloudera/sqoop
 
 hdfs dfs -ls sqoop
 hdfs dfs -cat sqoop/part-m-00000
 
-sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop1 --fields-terminated-by "\t"
+sqoop import --connect jdbc:mysql://quickstart/cm \
+--username root --password cloudera \
+--table USERS \
+--target-dir /user/cloudera/sqoop1 \
+--fields-terminated-by "\t"
+
 hdfs dfs -ls sqoop1
 hdfs dfs -cat sqoop1/part-m-00000
 
-sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop2 --as-parquetfile
+sqoop import --connect jdbc:mysql://quickstart/cm \
+--username root --password cloudera \
+--table USERS \
+--target-dir /user/cloudera/sqoop2 \
+--as-parquetfile
+
 hdfs dfs -ls sqoop2
 
 parquet-tools head hdfs://quickstart/user/cloudera/sqoop2/0d762369-3646-4484-9ec1-b702fff1d764.parquet
 parquet-tools schema hdfs://quickstart/user/cloudera/sqoop2/0d762369-3646-4484-9ec1-b702fff1d764.parquet
 parquet-tools meta hdfs://quickstart/user/cloudera/sqoop2/0d762369-3646-4484-9ec1-b702fff1d764.parquet
 
-sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop3 --as-parquetfile --compression-codec org.apache.hadoop.io.compress.SnappyCodec
+sqoop import --connect jdbc:mysql://quickstart/cm \
+--username root --password cloudera \
+--table USERS \
+--target-dir /user/cloudera/sqoop3 \
+--as-parquetfile \
+--compression-codec org.apache.hadoop.io.compress.SnappyCodec
 
 parqeut-tools schema hdfs://quickstart/user/cloudera/sqoop3/277a1c62-97fc-48e9-8703-5e3d75e8baff.parquet
 
 parquet-tools meta hdfs://quickstart/user/cloudera/sqoop3/277a1c62-97fc-48e9-8703-5e3d75e8baff.parquet
 parquet-tools meta hdfs://quickstart/user/cloudera/sqoop2/0d762369-3646-4484-9ec1-b702fff1d764.parquet
 
-sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop4 --as-parquetfile --compression-codec org.apache.hadoop.io.compress.GzipCodec
+sqoop import --connect jdbc:mysql://quickstart/cm \
+--username root --password cloudera \
+--table USERS \
+--target-dir /user/cloudera/sqoop4 \
+--as-parquetfile \
+--compression-codec org.apache.hadoop.io.compress.GzipCodec
 
 ```
 
@@ -549,7 +579,13 @@ OPTIMISTIC_LOCK_VERSION = 1
 ##
 
 ```
-[cloudera@quickstart ~]$ sqoop import --connect jdbc:mysql://quickstart/cm --username root --password cloudera --table USERS --target-dir /user/cloudera/sqoop5 --as-avrodatafile --compression-codec org.apache.hadoop.io.compress.SnappyCodec
+[cloudera@quickstart ~]$ 
+sqoop import --connect jdbc:mysql://quickstart/cm \
+--username root --password cloudera \
+--table USERS \
+--target-dir /user/cloudera/sqoop5 \
+--as-avrodatafile \
+--compression-codec org.apache.hadoop.io.compress.SnappyCodec
 ```
 
 ```
