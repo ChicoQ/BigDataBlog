@@ -1,6 +1,5 @@
+```
 [cloudera@quickstart Downloads]$ sqoop import --connect jdbc:mysql://quickstart/loudacre --username root --password cloudera --table accounts --target-dir /user/cloudera/sqoop14
-
-
 
 
 scala> r2.show(5)
@@ -82,9 +81,6 @@ nm21: org.apache.spark.rdd.RDD[String] = MapPartitionsRDD[80] at map at <console
 scala> nm21.first
 res15: String = Aaron Robin                                                     
 
-scala> 
-
-scala> 
 
 scala> r2.registerTempTable("acctbl")
 
@@ -145,15 +141,6 @@ scala> df2.sort('cdt).select('nu, 'cdt, 'fn, 'ln).show(10)
 only showing top 10 rows
 
 
-scala> 
-
-scala> 
-
-scala> 
-
-scala> 
-
-scala> 
 
 scala> sqlContext.getConf("spark.sql.parquet.compression.codec")
 res21: String = gzip
@@ -166,21 +153,16 @@ import com.databricks.spark.avro._
 
 scala> sqlContext.setConf("spark.sql.avro.compression.codec", "snappy")
 
-scala> 
+
 
 scala> df2.write.avro("/user/cloudera/loudacre2")
                                                                                 
-scala> 
+
 
 scala> sqlContext.setConf("spark.sql.avro.compression.codec", "uncompressed")
 
-scala> 
 
 scala> df2.write.avro("/user/cloudera/loudacre3")
-
-
-
-
 
 
 [cloudera@quickstart ~]$ hdfs dfs -ls loudacre1
@@ -210,3 +192,5 @@ Found 5 items
 -rw-r--r--   1 cloudera cloudera    4737366 2017-12-04 01:12 loudacre3/part-r-00001-0a636b84-30cc-4851-bf23-1d687c94cf22.avro
 -rw-r--r--   1 cloudera cloudera    4720383 2017-12-04 01:12 loudacre3/part-r-00002-0a636b84-30cc-4851-bf23-1d687c94cf22.avro
 -rw-r--r--   1 cloudera cloudera    4683184 2017-12-04 01:12 loudacre3/part-r-00003-0a636b84-30cc-4851-bf23-1d687c94cf22.avro
+
+```
