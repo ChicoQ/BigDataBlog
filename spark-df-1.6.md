@@ -136,7 +136,52 @@ scala> result.filter(result("name") == "Andy").show
               result.filter(result("name") == "Andy").show
                      ^
 
-scala> 
+scala> result.where(result("name") === "Andy").show
++---+----+
+|age|name|
++---+----+
+| 30|Andy|
++---+----+
+
+
+scala> result.filter(result("name") === "Andy").show
++---+----+
+|age|name|
++---+----+
+| 30|Andy|
++---+----+
+
+scala> result.filter(result("name") !== "Andy").show
++----+-------+
+| age|   name|
++----+-------+
+|null|Michael|
+|  19| Justin|
++----+-------+
+
+
+scala> result.filter(result("name") =!= "Andy").show
+<console>:28: error: value =!= is not a member of org.apache.spark.sql.Column
+              result.filter(result("name") =!= "Andy").show
+                                           ^
+
+scala> result.filter($"name" =!= "Andy").show
+<console>:28: error: value =!= is not a member of org.apache.spark.sql.ColumnName
+              result.filter($"name" =!= "Andy").show
+                                    ^
+
+scala> result.filter('name =!= "Andy").show
+<console>:28: error: value =!= is not a member of Symbol
+              result.filter('name =!= "Andy").show
+                                  ^
+
+scala> result.filter('name !== "Andy").show
++----+-------+
+| age|   name|
++----+-------+
+|null|Michael|
+|  19| Justin|
++----+-------+
 
 scala> result.filter(result("name") = "Andy").show
 <console>:28: error: value update is not a member of org.apache.spark.sql.DataFrame
