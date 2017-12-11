@@ -1,5 +1,9 @@
 ```
-[cloudera@quickstart Downloads]$ sqoop import --connect jdbc:mysql://quickstart/loudacre --username root --password cloudera --table accounts --target-dir /user/cloudera/sqoop14
+[cloudera@quickstart Downloads]$ 
+sqoop import --connect jdbc:mysql://quickstart/loudacre \
+--username root --password cloudera \
+--table accounts \
+--target-dir /user/cloudera/sqoop14
 
 
 scala> r2.show(5)
@@ -40,8 +44,6 @@ res5: Long = 47120
 scala> val nm1 = nm.distinct
 nm1: org.apache.spark.sql.DataFrame = [fn: string, ln: string]
 
-scala> nm1.sort
-sort                   sortWithinPartitions   
 
 scala> nm1.sort('ln).show(50)
 
@@ -60,7 +62,6 @@ scala> nm1.sort('ln).select(concat('ln, lit(" "), 'fn)).show(50)
 |    Aaron Violet|
 |     Aaron Willa|
 |     Aaron Robin|
-
 
 
 scala> val nm2 = nm1.sort('ln).select(concat('ln, lit(" "), 'fn))
@@ -153,17 +154,11 @@ import com.databricks.spark.avro._
 
 scala> sqlContext.setConf("spark.sql.avro.compression.codec", "snappy")
 
-
-
 scala> df2.write.avro("/user/cloudera/loudacre2")
                                                                                 
-
-
 scala> sqlContext.setConf("spark.sql.avro.compression.codec", "uncompressed")
 
-
 scala> df2.write.avro("/user/cloudera/loudacre3")
-
 
 [cloudera@quickstart ~]$ hdfs dfs -ls loudacre1
 Found 7 items
@@ -174,7 +169,7 @@ Found 7 items
 -rw-r--r--   1 cloudera cloudera     965107 2017-12-04 01:07 loudacre1/part-r-00001-09ad8099-068d-449b-8da3-7cd402723e71.gz.parquet
 -rw-r--r--   1 cloudera cloudera     956036 2017-12-04 01:07 loudacre1/part-r-00002-09ad8099-068d-449b-8da3-7cd402723e71.gz.parquet
 -rw-r--r--   1 cloudera cloudera     925881 2017-12-04 01:07 loudacre1/part-r-00003-09ad8099-068d-449b-8da3-7cd402723e71.gz.parquet
-[cloudera@quickstart ~]$ 
+
 [cloudera@quickstart ~]$ hdfs dfs -ls loudacre2
 Found 5 items
 -rw-r--r--   1 cloudera cloudera          0 2017-12-04 01:08 loudacre2/_SUCCESS
@@ -182,9 +177,7 @@ Found 5 items
 -rw-r--r--   1 cloudera cloudera    2240330 2017-12-04 01:08 loudacre2/part-r-00001-252ca4ba-ad23-491c-8bfd-39a396b687d2.avro
 -rw-r--r--   1 cloudera cloudera    2219813 2017-12-04 01:08 loudacre2/part-r-00002-252ca4ba-ad23-491c-8bfd-39a396b687d2.avro
 -rw-r--r--   1 cloudera cloudera    2164626 2017-12-04 01:08 loudacre2/part-r-00003-252ca4ba-ad23-491c-8bfd-39a396b687d2.avro
-[cloudera@quickstart ~]$ 
-[cloudera@quickstart ~]$ 
-[cloudera@quickstart ~]$ 
+
 [cloudera@quickstart ~]$ hdfs dfs -ls loudacre3
 Found 5 items
 -rw-r--r--   1 cloudera cloudera          0 2017-12-04 01:12 loudacre3/_SUCCESS
